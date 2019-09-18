@@ -42,21 +42,11 @@ extension OnboardingContentViewItem {
         view.addSubview(item)
 
         // add constraints
-        item >>>- {
-            $0.attribute = .height
-            $0.constant = 10000
-            $0.relation = .lessThanOrEqual
-            return
-        }
-
-        for attribute in [NSLayoutConstraint.Attribute.leading, NSLayoutConstraint.Attribute.trailing] {
-            (view, item) >>>- {
-                $0.attribute = attribute
-                return
-            }
-        }
-
-        for attribute in [NSLayoutConstraint.Attribute.centerX, NSLayoutConstraint.Attribute.centerY] {
+        for attribute in [
+            NSLayoutConstraint.Attribute.leading,
+            NSLayoutConstraint.Attribute.trailing,
+            NSLayoutConstraint.Attribute.top,
+            NSLayoutConstraint.Attribute.bottom] {
             (view, item) >>>- {
                 $0.attribute = attribute
                 return

@@ -117,7 +117,6 @@ extension ViewController: PaperOnboardingDataSource {
     //    }
 }
 
-
 //MARK: Constants
 private extension ViewController {
     
