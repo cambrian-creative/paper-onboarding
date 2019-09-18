@@ -8,34 +8,6 @@
 
 import UIKit
 
-public struct OnboardingItemInfo {
-    public let informationImage: UIImage
-    public let title: String
-    public let description: String
-    public let pageIcon: UIImage
-    public let color: UIColor
-    public let titleColor: UIColor
-    public let descriptionColor: UIColor
-    public let titleFont: UIFont
-    public let descriptionFont: UIFont
-    public let descriptionLabelPadding: CGFloat
-    public let titleLabelPadding: CGFloat
-    
-    public init (informationImage: UIImage, title: String, description: String, pageIcon: UIImage, color: UIColor, titleColor: UIColor, descriptionColor: UIColor, titleFont: UIFont, descriptionFont: UIFont, descriptionLabelPadding: CGFloat = 0, titleLabelPadding: CGFloat = 0) {
-        self.informationImage = informationImage
-        self.title = title
-        self.description = description
-        self.pageIcon = pageIcon
-        self.color = color
-        self.titleColor = titleColor
-        self.descriptionColor = descriptionColor
-        self.titleFont = titleFont
-        self.descriptionFont = descriptionFont
-        self.descriptionLabelPadding = descriptionLabelPadding
-        self.titleLabelPadding = titleLabelPadding
-    }
-}
-
 /// An instance of PaperOnboarding which display collection of information.
 open class PaperOnboarding: UIView {
 
@@ -52,8 +24,6 @@ open class PaperOnboarding: UIView {
     /// current index item
     open fileprivate(set) var currentIndex: Int = 0
     fileprivate(set) var itemsCount: Int = 0
-
-    fileprivate var itemsInfo: [OnboardingItemInfo]?
 
     fileprivate let pageViewBottomConstant: CGFloat
     fileprivate var pageViewSelectedRadius: CGFloat = 22
@@ -101,8 +71,10 @@ public extension PaperOnboarding {
                 (self.delegate as? PaperOnboardingDelegate)?.onboardingDidTransitonToIndex(index)
             })
 
+            let backgroundColor = (delegate as! PaperOnboardingDelegate).backgroundColor(index)
+
             if let postion = pageView?.positionItemIndex(index, onView: self) {
-                fillAnimationView?.fillAnimation(backgroundColor(currentIndex), centerPosition: postion, duration: 0.5)
+                fillAnimationView?.fillAnimation(backgroundColor, centerPosition: postion, duration: 0.5)
             }
             pageView?.currentIndex(index, animated: animated)
             contentView?.currentItem(index, animated: animated)
@@ -127,9 +99,11 @@ extension PaperOnboarding {
         if case let dataSource as PaperOnboardingDataSource = dataSource {
             pageViewSelectedRadius = dataSource.onboardingPageItemSelectedRadius()
         }
-        itemsInfo = createItemsInfo()
         translatesAutoresizingMaskIntoConstraints = false
-        fillAnimationView = FillAnimationView.animationViewOnView(self, color: backgroundColor(currentIndex))
+        
+        let backgroundColor = (delegate as! PaperOnboardingDelegate).backgroundColor(currentIndex)
+
+        fillAnimationView = FillAnimationView.animationViewOnView(self, color: backgroundColor)
         contentView = OnboardingContentView.contentViewOnView(self,
                                                               delegate: self,
                                                               itemsCount: itemsCount,
@@ -168,36 +142,7 @@ extension PaperOnboarding {
                 return dataSource.onboardingPageItemColor(at: $0)
         })
 
-        pageView.configuration = { [weak self] item, index in
-            item.imageView?.image = self?.itemsInfo?[index].pageIcon
-        }
-
         return pageView
-    }
-
-    fileprivate func createItemsInfo() -> [OnboardingItemInfo] {
-        guard case let dataSource as PaperOnboardingDataSource = self.dataSource else {
-            fatalError("set dataSource")
-        }
-
-        var items = [OnboardingItemInfo]()
-        for index in 0 ..< itemsCount {
-            let info = dataSource.onboardingItem(at: index)
-            items.append(info)
-        }
-        return items
-    }
-}
-
-// MARK: helpers
-
-extension PaperOnboarding {
-
-    fileprivate func backgroundColor(_ index: Int) -> UIColor {
-        guard let color = itemsInfo?[index].color else {
-            return .black
-        }
-        return color
     }
 }
 
@@ -220,12 +165,24 @@ extension PaperOnboarding: GestureControlDelegate {
 // MARK: OnboardingDelegate
 
 extension PaperOnboarding: OnboardingContentViewDelegate {
-
-    func onboardingItemAtIndex(_ index: Int) -> OnboardingItemInfo? {
-        return itemsInfo?[index]
+    func onboardingItemAtIndex(_ index: Int) -> OnboardingContentViewItem {
+        return OnboardingItem()
     }
+    
+    func animateIn(item: OnboardingContentViewItem, duration: Double) {
+        
+    }
+    
+    func animateOut(item: OnboardingContentViewItem, duration: Double) {
+        
+    }
+}
 
-    @objc func onboardingConfigurationItem(_ item: OnboardingContentViewItem, index: Int) {
-        (delegate as? PaperOnboardingDelegate)?.onboardingConfigurationItem(item, index: index)
+class OnboardingItem : OnboardingContentViewItem {
+    override init() {
+        super.init()
+    }
+    public required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

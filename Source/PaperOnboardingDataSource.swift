@@ -23,14 +23,6 @@ public protocol PaperOnboardingDataSource {
     func onboardingItemsCount() -> Int
 
     /**
-     Asks the data source for configureation item.
-
-     - parameter index: An index of item in PaperOnboarding.
-     - returns: configuration info for item
-     */
-    func onboardingItem(at index: Int) -> OnboardingItemInfo
-
-    /**
      Asks the color for PageView item
 
      - parameter index: An index of item in PaperOnboarding.

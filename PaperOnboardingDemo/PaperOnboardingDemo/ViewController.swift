@@ -12,30 +12,6 @@ class ViewController: UIViewController {
 
     @IBOutlet var skipButton: UIButton!
 
-    fileprivate let items = [
-        OnboardingItemInfo(informationImage: Asset.hotels.image,
-                           title: "Hotels",
-                           description: "All hotels and hostels are sorted by hospitality rating",
-                           pageIcon: Asset.key.image,
-                           color: UIColor(red: 0.40, green: 0.56, blue: 0.71, alpha: 1.00),
-                           titleColor: UIColor.white, descriptionColor: UIColor.white, titleFont: titleFont, descriptionFont: descriptionFont),
-        
-        OnboardingItemInfo(informationImage: Asset.banks.image,
-                           title: "Banks",
-                           description: "We carefully verify all banks before add them into the app",
-                           pageIcon: Asset.wallet.image,
-                           color: UIColor(red: 0.40, green: 0.69, blue: 0.71, alpha: 1.00),
-                           titleColor: UIColor.white, descriptionColor: UIColor.white, titleFont: titleFont, descriptionFont: descriptionFont),
-        
-        OnboardingItemInfo(informationImage: Asset.stores.image,
-                           title: "Stores",
-                           description: "All local stores are categorized for your convenience",
-                           pageIcon: Asset.shoppingCart.image,
-                           color: UIColor(red: 0.61, green: 0.56, blue: 0.74, alpha: 1.00),
-                           titleColor: UIColor.white, descriptionColor: UIColor.white, titleFont: titleFont, descriptionFont: descriptionFont),
-        
-        ]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         skipButton.isHidden = true
@@ -78,28 +54,31 @@ extension ViewController {
 // MARK: PaperOnboardingDelegate
 
 extension ViewController: PaperOnboardingDelegate {
+    func backgroundColor(_ index: Int) -> UIColor {
+        return .blue
+    }
+    
+    func onboardingWillTransitonToLeaving() {
+        
+    }
+    
+    func onboardingDidTransitonToIndex(_ index: Int) {
+        
+    }
+    
+    var enableTapsOnPageControl: Bool {
+        return true
+    }
+    
 
     func onboardingWillTransitonToIndex(_ index: Int) {
         skipButton.isHidden = index == 2 ? false : true
-    }
-
-    func onboardingConfigurationItem(_ item: OnboardingContentViewItem, index: Int) {
-        
-        // configure item
-        
-        //item.titleLabel?.backgroundColor = .redColor()
-        //item.descriptionLabel?.backgroundColor = .redColor()
-        //item.imageView = ...
     }
 }
 
 // MARK: PaperOnboardingDataSource
 
 extension ViewController: PaperOnboardingDataSource {
-
-    func onboardingItem(at index: Int) -> OnboardingItemInfo {
-        return items[index]
-    }
 
     func onboardingItemsCount() -> Int {
         return 3

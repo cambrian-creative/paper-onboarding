@@ -10,14 +10,14 @@ import UIKit
 
 protocol OnboardingContentViewDelegate: class {
 
-    func onboardingItemAtIndex(_ index: Int) -> OnboardingItemInfo?
-    func onboardingConfigurationItem(_ item: OnboardingContentViewItem, index: Int)
+    func onboardingItemAtIndex(_ index: Int) -> OnboardingContentViewItem
+    func animateIn(item: OnboardingContentViewItem, duration: Double)
+    func animateOut(item: OnboardingContentViewItem, duration: Double)
 }
 
 class OnboardingContentView: UIView {
 
     fileprivate struct Constants {
-        static let dyOffsetAnimation: CGFloat = 110
         static let showDuration: Double = 0.8
         static let hideDuration: Double = 0.2
     }
@@ -28,7 +28,7 @@ class OnboardingContentView: UIView {
     init(itemsCount _: Int, delegate: OnboardingContentViewDelegate) {
         self.delegate = delegate
         super.init(frame: CGRect.zero)
-
+        
         commonInit()
     }
 
@@ -86,23 +86,7 @@ extension OnboardingContentView {
     }
 
     fileprivate func createItem(_ index: Int) -> OnboardingContentViewItem {
-
-        guard let info = delegate?.onboardingItemAtIndex(index) else {
-            return OnboardingContentViewItem.itemOnView(self, titlePadding: 0, descriptionPadding: 0)
-        }
-
-        let item = Init(OnboardingContentViewItem.itemOnView(self, titlePadding: info.titleLabelPadding, descriptionPadding: info.descriptionLabelPadding)) {
-            $0.imageView?.image = info.informationImage
-            $0.titleLabel?.text = info.title
-            $0.titleLabel?.font = info.titleFont
-            $0.titleLabel?.textColor = info.titleColor
-            $0.descriptionLabel?.text = info.description
-            $0.descriptionLabel?.font = info.descriptionFont
-            $0.descriptionLabel?.textColor = info.descriptionColor
-        }
-
-        delegate?.onboardingConfigurationItem(item, index: index)
-        return item
+        return delegate!.onboardingItemAtIndex(index)
     }
 }
 
@@ -115,35 +99,10 @@ extension OnboardingContentView {
             return
         }
 
-        item.descriptionBottomConstraint?.constant -= Constants.dyOffsetAnimation
-        item.titleCenterConstraint?.constant *= 1.3
-
-        UIView.animate(withDuration: duration,
-                       delay: 0,
-                       options: .curveEaseOut, animations: {
-                           item.alpha = 0
-                           self.layoutIfNeeded()
-                       },
-                       completion: { _ in
-                           item.removeFromSuperview()
-        })
+        delegate!.animateOut(item: item, duration: duration)
     }
 
     fileprivate func showItemView(_ item: OnboardingContentViewItem, duration: Double) {
-        item.descriptionBottomConstraint?.constant = Constants.dyOffsetAnimation
-        item.titleCenterConstraint?.constant /= 2
-        item.alpha = 0
-        layoutIfNeeded()
-
-        item.descriptionBottomConstraint?.constant = 0
-        item.titleCenterConstraint?.constant *= 2
-
-        UIView.animate(withDuration: duration,
-                       delay: 0,
-                       options: .curveEaseOut, animations: {
-                           item.alpha = 0
-                           item.alpha = 1
-                           self.layoutIfNeeded()
-        }, completion: nil)
+        delegate!.animateIn(item: item, duration: duration)
     }
 }

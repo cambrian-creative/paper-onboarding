@@ -6,7 +6,7 @@
 //  Copyright © 2017 Alex K. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 /**
  *  The delegate of a PaperOnboarding object must adopt the PaperOnboardingDelegate protocol. Optional methods of the
@@ -34,25 +34,11 @@ public protocol PaperOnboardingDelegate {
     func onboardingDidTransitonToIndex(_ index: Int)
 
     /**
-     Tells the delegate the PaperOnboarding is about to draw a item for a particular row. Use this method for configure items
-
-     - parameter item:  A OnboardingContentViewItem object that PaperOnboarding is going to use when drawing the row.
-     - parameter index: An curretn index item
-     */
-    func onboardingConfigurationItem(_ item: OnboardingContentViewItem, index: Int)
-
-    /**
      Should `PaperOnboarding` react to taps on `PageControl` view.
      If `true`, will scroll to tapped page.
      */
     var enableTapsOnPageControl: Bool { get }
-}
-
-// This extension will make the delegate method optional
-public extension PaperOnboardingDelegate {
-    func onboardingWillTransitonToIndex(_: Int) {}
-    func onboardingDidTransitonToIndex(_: Int) {}
-    func onboardingWillTransitonToLeaving() {}
-    func onboardingConfigurationItem(_: OnboardingContentViewItem, index _: Int) {}
-    var enableTapsOnPageControl: Bool { return true }
+    
+    func backgroundColor(_ index: Int) -> UIColor
+    
 }
