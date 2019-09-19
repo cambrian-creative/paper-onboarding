@@ -8,13 +8,11 @@
 
 import UIKit
 
-public class OnboardingContentViewItem: UIView {
-    public var imageView: UIImageView?
-    public var titleLabel: UILabel?
-    public var descriptionLabel: UILabel?
-
+open class OnboardingContentViewItem: UIView {
     public init() {
         super.init(frame: CGRect.zero)
+        
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     public required init?(coder _: NSCoder) {

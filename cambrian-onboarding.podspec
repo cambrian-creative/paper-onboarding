@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "cambrian-onboarding"
-  s.version      = "7.0.1"
+  s.version      = "7.0.2"
   s.summary      = "Amazing onboarding."
   s.license      = 'MIT'
   s.homepage     = 'https://github.com/cambrian-creative/paper-onboarding'
