@@ -16,6 +16,8 @@ class PageView: UIView {
     var duration: Double = 0.7
     var space: CGFloat = 20 // space between items
     let itemColor: (Int) -> UIColor
+    
+    fileprivate let appliesColorUniversally: Bool
 
     // configure items set image or chage color for border view
     var configuration: ((_ item: PageViewItem, _ index: Int) -> Void)? {
@@ -27,8 +29,9 @@ class PageView: UIView {
     fileprivate var containerX: NSLayoutConstraint?
     var containerView: PageContainer?
 
-    init(frame: CGRect, itemsCount: Int, radius: CGFloat, selectedRadius: CGFloat, itemColor: @escaping (Int) -> UIColor) {
+    init(frame: CGRect, itemsCount: Int, radius: CGFloat, selectedRadius: CGFloat, appliesColorUniversally: Bool, itemColor: @escaping (Int) -> UIColor) {
         self.itemsCount = itemsCount
+        self.appliesColorUniversally = appliesColorUniversally
         itemRadius = radius
         selectedItemRadius = selectedRadius
         self.itemColor = itemColor
@@ -56,11 +59,12 @@ class PageView: UIView {
 
 extension PageView {
 
-    class func pageViewOnView(_ view: UIView, itemsCount: Int, bottomConstant: CGFloat, radius: CGFloat, selectedRadius: CGFloat, itemColor: @escaping (Int) -> UIColor) -> PageView {
+    class func pageViewOnView(_ view: UIView, itemsCount: Int, bottomConstant: CGFloat, radius: CGFloat, selectedRadius: CGFloat, appliesColorUniversally: Bool, itemColor: @escaping (Int) -> UIColor) -> PageView {
         let pageView = PageView(frame: CGRect.zero,
                                 itemsCount: itemsCount,
                                 radius: radius,
                                 selectedRadius: selectedRadius,
+                                appliesColorUniversally: appliesColorUniversally,
                                 itemColor: itemColor)
         pageView.translatesAutoresizingMaskIntoConstraints = false
         pageView.alpha = 0.4
@@ -124,6 +128,7 @@ extension PageView {
                                          selectedRadius: selectedItemRadius,
                                          space: space,
                                          itemsCount: itemsCount,
+                                         appliesColorUniversally: appliesColorUniversally,
                                          itemColor: itemColor)
         let container = Init(pageControl) {
             $0.backgroundColor = .clear

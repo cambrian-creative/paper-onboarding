@@ -39,4 +39,6 @@ public protocol PaperOnboardingDataSource: class {
     ///
     /// - Returns: selected state radius of the PageView Item
     func onboardingPageItemSelectedRadius() -> CGFloat
+    
+    var appliesItemColorUniversally: Bool { get }
 }

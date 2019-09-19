@@ -132,6 +132,7 @@ extension PaperOnboarding {
             bottomConstant: pageViewBottomConstant * -1,
             radius: pageViewRadius,
             selectedRadius: pageViewSelectedRadius,
+            appliesColorUniversally: dataSource.appliesItemColorUniversally,
             itemColor: { [weak self] in
                 return self?.dataSource.onboardingPageItemColor(at: $0) ?? .white
             })

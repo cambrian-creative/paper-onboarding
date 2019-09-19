@@ -96,7 +96,11 @@ extension ViewController: PaperOnboardingDataSource {
     }
     
     func onboardingPageItemColor(at index: Int) -> UIColor {
-        return .white
+        return [.white, .yellow, .purple][index]
+    }
+    
+    var appliesItemColorUniversally: Bool {
+        return true
     }
 }
 

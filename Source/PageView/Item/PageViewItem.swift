@@ -42,16 +42,10 @@ class PageViewItem: UIView {
 extension PageViewItem {
 
     func animationSelected(_ selected: Bool, duration: Double, fillColor: Bool) {
-        let toAlpha: CGFloat = selected == true ? 1 : 0
-        imageAlphaAnimation(toAlpha, duration: duration)
-
         let currentRadius = selected == true ? selectedCircleRadius : circleRadius
         let scaleAnimation = circleScaleAnimation(currentRadius - lineWidth / 2.0, duration: duration)
-        let toColor = fillColor == true ? itemColor : UIColor.clear
-        let colorAnimation = circleBackgroundAnimation(toColor, duration: duration)
 
         circleLayer?.add(scaleAnimation, forKey: nil)
-        circleLayer?.add(colorAnimation, forKey: nil)
     }
 }
 
@@ -99,7 +93,7 @@ extension PageViewItem {
             $0.path = path.cgPath
             $0.lineWidth = lineWidth
             $0.strokeColor = itemColor.cgColor
-            $0.fillColor = UIColor.clear.cgColor
+            $0.fillColor = itemColor.cgColor
         }
         return layer
     }

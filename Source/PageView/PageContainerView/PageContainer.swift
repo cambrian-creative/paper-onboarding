@@ -17,15 +17,27 @@ class PageContainer: UIView {
     fileprivate let itemRadius: CGFloat
     fileprivate let selectedItemRadius: CGFloat
     fileprivate let itemsCount: Int
+    fileprivate let appliesColorUniversally: Bool
     fileprivate let animationKey = "animationKey"
 
-    init(radius: CGFloat, selectedRadius: CGFloat, space: CGFloat, itemsCount: Int, itemColor: (Int) -> UIColor) {
+    init(radius: CGFloat, selectedRadius: CGFloat, space: CGFloat, itemsCount: Int, appliesColorUniversally: Bool, itemColor: (Int) -> UIColor) {
         self.itemsCount = itemsCount
         self.space = space
+        self.appliesColorUniversally = appliesColorUniversally
         itemRadius = radius
         selectedItemRadius = selectedRadius
         super.init(frame: CGRect.zero)
         items = createItems(itemsCount, radius: radius, selectedRadius: selectedRadius, itemColor: itemColor)
+        
+        guard let firstItem = items?.first else {
+            return
+        }
+        
+        self.items!.forEach {
+            let cgColor = firstItem.itemColor.cgColor
+            $0.circleLayer?.strokeColor = cgColor
+            $0.circleLayer?.fillColor = cgColor
+        }
     }
 
     required init?(coder _: NSCoder) {
@@ -41,7 +53,7 @@ extension PageContainer {
         guard let items = self.items,
             index != currentIndex else { return }
 
-        animationItem(items[index], selected: true, duration: duration)
+        animationItem(items[index], selected: true, duration: duration, fillColor: true)
 
         let fillColor = index > currentIndex ? true : false
         animationItem(items[currentIndex], selected: false, duration: duration, fillColor: fillColor)
@@ -63,6 +75,13 @@ extension PageContainer {
             }
 
         UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
+            if selected {
+                self.items!.forEach {
+                    let cgColor = item.itemColor.cgColor
+                    $0.circleLayer?.strokeColor = cgColor
+                    $0.circleLayer?.fillColor = cgColor
+                }
+            }
             self.layoutIfNeeded()
         }, completion: nil)
 
