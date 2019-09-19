@@ -12,14 +12,14 @@ import UIKit
 open class PaperOnboarding: UIView {
 
     ///  The object that acts as the data source of the  PaperOnboardingDataSource.
-    @IBOutlet weak open var dataSource: AnyObject? {
+    weak var dataSource: PaperOnboardingDataSource! {
         didSet {
             commonInit()
         }
     }
 
     /// The object that acts as the delegate of the PaperOnboarding. PaperOnboardingDelegate protocol
-    @IBOutlet weak open var delegate: AnyObject?
+    weak var delegate: PaperOnboardingDelegate!
 
     /// current index item
     open fileprivate(set) var currentIndex: Int = 0
@@ -63,15 +63,15 @@ public extension PaperOnboarding {
      */
     func currentIndex(_ index: Int, animated: Bool) {
         if 0 ..< itemsCount ~= index {
-            (delegate as? PaperOnboardingDelegate)?.onboardingWillTransitonToIndex(index)
+            delegate.onboardingWillTransitonToIndex(index)
             currentIndex = index
             CATransaction.begin()
-
-            CATransaction.setCompletionBlock({
-                (self.delegate as? PaperOnboardingDelegate)?.onboardingDidTransitonToIndex(index)
+            
+            CATransaction.setCompletionBlock({ [weak self] in
+                self?.delegate.onboardingDidTransitonToIndex(index)
             })
 
-            let backgroundColor = (dataSource as! PaperOnboardingDataSource).onboardingPageItemColor(at: index)
+            let backgroundColor = delegate.onboardingItemBackgroundColor(atIndex: index)
 
             if let postion = pageView?.positionItemIndex(index, onView: self) {
                 fillAnimationView?.fillAnimation(backgroundColor, centerPosition: postion, duration: 0.5)
@@ -80,7 +80,7 @@ public extension PaperOnboarding {
             contentView?.currentItem(index, animated: animated)
             CATransaction.commit()
         } else if index >= itemsCount {
-            (delegate as? PaperOnboardingDelegate)?.onboardingWillTransitonToLeaving()
+            delegate.onboardingWillTransitonToLeaving()
         }
     }
 }
@@ -90,18 +90,13 @@ public extension PaperOnboarding {
 extension PaperOnboarding {
 
     fileprivate func commonInit() {
-        if case let dataSource as PaperOnboardingDataSource = dataSource {
-            itemsCount = dataSource.onboardingItemsCount()
-        }
-        if case let dataSource as PaperOnboardingDataSource = dataSource {
-            pageViewRadius = dataSource.onboardinPageItemRadius()
-        }
-        if case let dataSource as PaperOnboardingDataSource = dataSource {
-            pageViewSelectedRadius = dataSource.onboardingPageItemSelectedRadius()
-        }
+        itemsCount = dataSource.onboardingItemsCount()
+        pageViewRadius = dataSource.onboardinPageItemRadius()
+        pageViewSelectedRadius = dataSource.onboardingPageItemSelectedRadius()
+        
         translatesAutoresizingMaskIntoConstraints = false
         
-        let backgroundColor = (dataSource as! PaperOnboardingDataSource).onboardingPageItemColor(at: currentIndex)
+        let backgroundColor = delegate.onboardingItemBackgroundColor(atIndex: currentIndex)
 
         fillAnimationView = FillAnimationView.animationViewOnView(self, color: backgroundColor)
         contentView = OnboardingContentView.contentViewOnView(self,
@@ -117,7 +112,7 @@ extension PaperOnboarding {
 
     @objc fileprivate func tapAction(_ sender: UITapGestureRecognizer) {
         guard
-            (delegate as? PaperOnboardingDelegate)?.enableTapsOnPageControl == true,
+            delegate.enableTapsOnPageControl == true,
             let pageView = self.pageView,
             let pageControl = pageView.containerView
         else { return }
@@ -127,7 +122,7 @@ extension PaperOnboarding {
         let index = pageItem.tag - 1
         guard index != currentIndex else { return }
         currentIndex(index, animated: true)
-        (delegate as? PaperOnboardingDelegate)?.onboardingWillTransitonToIndex(index)
+        delegate.onboardingWillTransitonToIndex(index)
     }
 
     fileprivate func createPageView() -> PageView {
@@ -138,9 +133,8 @@ extension PaperOnboarding {
             radius: pageViewRadius,
             selectedRadius: pageViewSelectedRadius,
             itemColor: { [weak self] in
-                guard let dataSource = self?.dataSource as? PaperOnboardingDataSource else { return .white }
-                return dataSource.onboardingPageItemColor(at: $0)
-        })
+                return self?.dataSource.onboardingPageItemColor(at: $0) ?? .white
+            })
 
         return pageView
     }
@@ -166,23 +160,14 @@ extension PaperOnboarding: GestureControlDelegate {
 
 extension PaperOnboarding: OnboardingContentViewDelegate {
     func onboardingItemAtIndex(_ index: Int) -> OnboardingContentViewItem {
-        return OnboardingItem()
+        return delegate.onboardingItem(atIndex: index)
     }
     
     func animateIn(item: OnboardingContentViewItem, duration: Double) {
-        
+        delegate.animateIn(item: item, duration: duration)
     }
     
     func animateOut(item: OnboardingContentViewItem, duration: Double) {
-        
-    }
-}
-
-class OnboardingItem : OnboardingContentViewItem {
-    override init() {
-        super.init()
-    }
-    public required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        delegate.animateOut(item: item, duration: duration)
     }
 }

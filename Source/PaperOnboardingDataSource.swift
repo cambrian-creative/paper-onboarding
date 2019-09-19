@@ -12,7 +12,7 @@ import UIKit
  *  The PaperOnboardingDataSource protocol is adopted by an object that mediates the application’s data model for a PaperOnboarding object.
  The data source information it needs to construct and modify a PaperOnboarding.
  */
-public protocol PaperOnboardingDataSource {
+public protocol PaperOnboardingDataSource: class {
 
     /**
      Asks the data source to return the number of items.
@@ -39,19 +39,4 @@ public protocol PaperOnboardingDataSource {
     ///
     /// - Returns: selected state radius of the PageView Item
     func onboardingPageItemSelectedRadius() -> CGFloat
-}
-
-public extension PaperOnboardingDataSource {
-
-    func onboardingPageItemColor(at index: Int) -> UIColor {
-        return .white
-    }
-    
-    func onboardinPageItemRadius() -> CGFloat {
-        return 8
-    }
-    
-    func onboardingPageItemSelectedRadius() -> CGFloat {
-        return 22
-    }
 }

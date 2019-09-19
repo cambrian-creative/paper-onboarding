@@ -81,12 +81,24 @@ extension OnboardingContentView {
 extension OnboardingContentView {
 
     fileprivate func commonInit() {
-
         currentItem = createItem(0)
     }
 
     fileprivate func createItem(_ index: Int) -> OnboardingContentViewItem {
-        return delegate!.onboardingItemAtIndex(index)
+        let item = delegate!.onboardingItemAtIndex(index)
+        
+        item.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(item)
+        
+        NSLayoutConstraint.activate([
+            item.topAnchor.constraint(equalTo: topAnchor),
+            item.bottomAnchor.constraint(equalTo: bottomAnchor),
+            item.leftAnchor.constraint(equalTo: leftAnchor),
+            item.rightAnchor.constraint(equalTo: rightAnchor)
+        ])
+        
+        return item
     }
 }
 
@@ -98,7 +110,7 @@ extension OnboardingContentView {
         guard let item = item else {
             return
         }
-
+        
         delegate!.animateOut(item: item, duration: duration)
     }
 
