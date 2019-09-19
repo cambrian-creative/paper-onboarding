@@ -12,14 +12,14 @@ import UIKit
 open class PaperOnboarding: UIView {
 
     ///  The object that acts as the data source of the  PaperOnboardingDataSource.
-    weak var dataSource: PaperOnboardingDataSource! {
+    public weak var dataSource: PaperOnboardingDataSource! {
         didSet {
             commonInit()
         }
     }
 
     /// The object that acts as the delegate of the PaperOnboarding. PaperOnboardingDelegate protocol
-    weak var delegate: PaperOnboardingDelegate!
+    public weak var delegate: PaperOnboardingDelegate!
 
     /// current index item
     open fileprivate(set) var currentIndex: Int = 0
