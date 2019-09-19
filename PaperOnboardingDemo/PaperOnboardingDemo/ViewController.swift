@@ -58,24 +58,6 @@ extension ViewController: PaperOnboardingDelegate {
         return OnboardingItem()
     }
     
-    func animateIn(item: OnboardingContentViewItem, duration: Double) {
-        item.alpha = 0
-        item.transform = item.transform.translatedBy(x: 0, y: 50)
-        UIView.animate(withDuration: duration) {
-            item.alpha = 1
-            item.transform = item.transform.translatedBy(x: 0, y: -50)
-        }
-    }
-    
-    func animateOut(item: OnboardingContentViewItem, duration: Double) {
-        item.alpha = 1
-        item.transform = item.transform.translatedBy(x: 0, y: -20)
-        UIView.animate(withDuration: duration) {
-            item.alpha = 0
-            item.transform = item.transform.translatedBy(x: 0, y: 20)
-        }
-    }
-    
     func onboardingWillTransitonToLeaving() {
         // NOOP
     }
@@ -125,11 +107,11 @@ private extension ViewController {
     static let descriptionFont = UIFont(name: "OpenSans-Regular", size: 14.0) ?? UIFont.systemFont(ofSize: 14.0)
 }
 
-class OnboardingItem : OnboardingContentViewItem {
+class OnboardingItem : UIView, OnboardingContentViewItem {
     let exampleLabel = UILabel()
     
-    override init() {
-        super.init()
+    init() {
+        super.init(frame: CGRect.zero)
         
         translatesAutoresizingMaskIntoConstraints = false
         exampleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -148,7 +130,25 @@ class OnboardingItem : OnboardingContentViewItem {
             exampleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
+    
     public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func animateIn(duration: Double) {
+        alpha = 0
+        transform = transform.translatedBy(x: 0, y: 70)
+        UIView.animate(withDuration: duration) { [weak self] in
+            self?.alpha = 1
+            self?.transform = self?.transform.translatedBy(x: 0, y: -50) ?? CGAffineTransform()
+        }
+    }
+    
+    func animateOut(duration: Double) {
+        alpha = 1
+        UIView.animate(withDuration: duration) { [weak self] in
+            self?.alpha = 0
+            self?.transform = self?.transform.translatedBy(x: 0, y: -20) ?? CGAffineTransform()
+        }
     }
 }

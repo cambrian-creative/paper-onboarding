@@ -45,16 +45,6 @@ public protocol PaperOnboardingDelegate: class {
     func onboardingItem(atIndex index: Int) -> OnboardingContentViewItem
     
     /**
-     Perform the entry animation
-     */
-    func animateIn(item: OnboardingContentViewItem, duration: Double)
-    
-    /**
-     Perform the exit animation
-     */
-    func animateOut(item: OnboardingContentViewItem, duration: Double)
-    
-    /**
      Provides the actual content for the specified index
      */
     func onboardingItemBackgroundColor(atIndex index: Int) -> UIColor

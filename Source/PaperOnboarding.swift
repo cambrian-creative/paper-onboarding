@@ -162,12 +162,4 @@ extension PaperOnboarding: OnboardingContentViewDelegate {
     func onboardingItemAtIndex(_ index: Int) -> OnboardingContentViewItem {
         return delegate.onboardingItem(atIndex: index)
     }
-    
-    func animateIn(item: OnboardingContentViewItem, duration: Double) {
-        delegate.animateIn(item: item, duration: duration)
-    }
-    
-    func animateOut(item: OnboardingContentViewItem, duration: Double) {
-        delegate.animateOut(item: item, duration: duration)
-    }
 }

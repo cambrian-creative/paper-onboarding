@@ -9,10 +9,7 @@
 import UIKit
 
 protocol OnboardingContentViewDelegate: class {
-
     func onboardingItemAtIndex(_ index: Int) -> OnboardingContentViewItem
-    func animateIn(item: OnboardingContentViewItem, duration: Double)
-    func animateOut(item: OnboardingContentViewItem, duration: Double)
 }
 
 class OnboardingContentView: UIView {
@@ -111,10 +108,10 @@ extension OnboardingContentView {
             return
         }
         
-        delegate!.animateOut(item: item, duration: duration)
+        item.animateOut(duration: duration)
     }
 
     fileprivate func showItemView(_ item: OnboardingContentViewItem, duration: Double) {
-        delegate!.animateIn(item: item, duration: duration)
+        item.animateIn(duration: duration)
     }
 }

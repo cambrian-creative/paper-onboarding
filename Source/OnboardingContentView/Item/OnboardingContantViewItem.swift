@@ -8,14 +8,7 @@
 
 import UIKit
 
-open class OnboardingContentViewItem: UIView {
-    public init() {
-        super.init(frame: CGRect.zero)
-        
-        translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    public required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+public protocol OnboardingContentViewItem: UIView {
+    func animateIn(duration: Double)
+    func animateOut(duration: Double)
 }
