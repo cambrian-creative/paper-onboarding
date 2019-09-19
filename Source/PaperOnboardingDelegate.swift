@@ -37,8 +37,5 @@ public protocol PaperOnboardingDelegate {
      Should `PaperOnboarding` react to taps on `PageControl` view.
      If `true`, will scroll to tapped page.
      */
-    var enableTapsOnPageControl: Bool { get }
-    
-    func backgroundColor(_ index: Int) -> UIColor
-    
+    var enableTapsOnPageControl: Bool { get }    
 }
