@@ -145,7 +145,7 @@ extension PageView {
 
         container >>>- {
             $0.attribute = .width
-            $0.constant = selectedItemRadius * 2 + CGFloat(itemsCount - 1) * (itemRadius * 2) + space * CGFloat(itemsCount - 1)
+            $0.constant = (selectedItemRadius * 2) + (CGFloat(itemsCount - 1) * (itemRadius * 2)) + space * CGFloat(itemsCount - 1)
             return
         }
         return container
@@ -169,9 +169,10 @@ extension PageView {
         guard let containerX = self.containerX else {
             return
         }
-
-        let containerWidth = CGFloat(itemsCount + 1) * selectedItemRadius + space * CGFloat(itemsCount - 1)
-        let toValue = containerWidth / 2.0 - selectedItemRadius - (selectedItemRadius + space) * CGFloat(index)
+        
+        let containerWidth = (selectedItemRadius * 2) + (CGFloat(itemsCount - 1) * (itemRadius * 2)) + (space * CGFloat(itemsCount - 1))
+        let segmentSize = (containerWidth / CGFloat(itemsCount))
+        let toValue = (containerWidth / 2) - segmentSize * CGFloat(index) - segmentSize / 2
         containerX.constant = toValue
 
         if animated == true {

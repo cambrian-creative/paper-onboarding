@@ -29,6 +29,20 @@ class ViewController: UIViewController {
         onboarding.dataSource = self
         onboarding.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(onboarding)
+        
+        let marker = UIView()
+        marker.translatesAutoresizingMaskIntoConstraints = false
+        marker.backgroundColor = .white
+        
+        view.addSubview(marker)
+        
+        NSLayoutConstraint.activate([
+            marker.bottomAnchor.constraint(equalTo: onboarding.bottomAnchor, constant: -50),
+            marker.centerXAnchor.constraint(equalTo: onboarding.centerXAnchor),
+            marker.heightAnchor.constraint(equalToConstant: 5),
+            marker.widthAnchor.constraint(equalToConstant: 5)
+        ])
+        
 
         // Add constraints
         for attribute: NSLayoutConstraint.Attribute in [.left, .right, .top, .bottom] {
