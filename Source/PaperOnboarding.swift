@@ -64,9 +64,13 @@ public extension PaperOnboarding {
     func currentIndex(_ index: Int, animated: Bool) {
         if 0 ..< itemsCount ~= index {
             delegate.onboardingWillTransitonToIndex(index)
-            currentIndex = index
-            CATransaction.begin()
             
+            delegate.animateUserInteractionElementsOut(forIndex: currentIndex, duration: 0.2)
+            delegate.animateUserInteractionElementsIn(forIndex: index, duration: 0.8)
+            
+            currentIndex = index
+            
+            CATransaction.begin()
             CATransaction.setCompletionBlock({ [weak self] in
                 self?.delegate.onboardingDidTransitonToIndex(index)
             })

@@ -14,8 +14,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        skipButton.isHidden = true
 
+        skipButton.isHidden = true
+        skipButton.alpha = 0
+        
         setupPaperOnboardingView()
 
         view.bringSubviewToFront(skipButton)
@@ -54,6 +56,31 @@ extension ViewController {
 // MARK: PaperOnboardingDelegate
 
 extension ViewController: PaperOnboardingDelegate {
+    func animateUserInteractionElementsIn(forIndex index: Int, duration: Double) {
+        switch index {
+        case 2:
+            skipButton.isHidden = false
+            UIView.animate(withDuration: duration) { [weak self] in
+                self?.skipButton.alpha = 1
+            }
+        default:
+            break
+        }
+    }
+    
+    func animateUserInteractionElementsOut(forIndex index: Int, duration: Double) {
+        switch index {
+        case 2:
+            UIView.animate(withDuration: duration, animations: { [weak self] in
+                self?.skipButton.alpha = 0
+            }, completion: { [weak self] _ in
+                self?.skipButton.isHidden = true
+            })
+        default:
+            break
+        }
+    }
+    
     func onboardingItem(atIndex index: Int) -> OnboardingContentViewItem {
         return OnboardingItem()
     }
@@ -74,9 +101,7 @@ extension ViewController: PaperOnboardingDelegate {
         return [UIColor.blue, UIColor.red, UIColor.green][index]
     }
 
-    func onboardingWillTransitonToIndex(_ index: Int) {
-        skipButton.isHidden = index == 2 ? false : true
-    }
+    func onboardingWillTransitonToIndex(_ index: Int) {}
 }
 
 // MARK: PaperOnboardingDataSource

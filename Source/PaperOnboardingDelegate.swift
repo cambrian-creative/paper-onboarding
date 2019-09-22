@@ -13,39 +13,13 @@ import UIKit
  protocol allow the delegate to manage items, configure items, and perform other actions.
  */
 public protocol PaperOnboardingDelegate: class {
-
-    /**
-     Tells the delegate that the paperOnbording start scrolling.
-
-     - parameter index: An curretn index item
-     */
-    func onboardingWillTransitonToIndex(_ index: Int)
-
-    /**
-     Tells the delegate that the paperOnbording will try to transition to a screen after the last
-     */
-    func onboardingWillTransitonToLeaving()
-
-    /**
-     Tells the delegate that the specified item is now selected
-
-     - parameter index: An curretn index item
-     */
-    func onboardingDidTransitonToIndex(_ index: Int)
-
-    /**
-     Should `PaperOnboarding` react to taps on `PageControl` view.
-     If `true`, will scroll to tapped page.
-     */
     var enableTapsOnPageControl: Bool { get }
-    
-    /**
-     Provides the actual content for the specified index
-     */
+
+    func onboardingWillTransitonToIndex(_ index: Int)
+    func animateUserInteractionElementsIn(forIndex index: Int, duration: Double)
+    func animateUserInteractionElementsOut(forIndex index: Int, duration: Double)
+    func onboardingWillTransitonToLeaving()
+    func onboardingDidTransitonToIndex(_ index: Int)
     func onboardingItem(atIndex index: Int) -> OnboardingContentViewItem
-    
-    /**
-     Provides the actual content for the specified index
-     */
     func onboardingItemBackgroundColor(atIndex index: Int) -> UIColor
 }
